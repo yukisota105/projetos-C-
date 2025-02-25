@@ -1,0 +1,34 @@
+using System;
+
+class Program {
+  public static void Main (string[] args) {
+    Pessoa p = new Pessoa();
+    Console.WriteLine(p.ToString());
+
+    p.Nome = "João";
+    Console.WriteLine(p);
+
+    Console.ReadKey();
+  }
+}
+
+class Pessoa{
+    private string nome;
+
+    public Pessoa(){
+      this.nome = null;
+    }
+
+    public Pessoa(string nome){
+      this.nome = nome;
+    }
+
+    public string Nome{
+      get{return nome;}
+      set{nome = value;}
+    }
+
+    public override string ToString(){
+      return (String.Format("Nome: {0}", nome));
+  }
+}
