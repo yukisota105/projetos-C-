@@ -1,0 +1,310 @@
+using System;
+
+namespace agoravai
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const int TCar = 300;
+            const int TCam = 200;
+            const int TTam = TCar + TCam;
+
+            Veiculo[] v = new Veiculo[TTam];
+            int cam = 0;//contador de caminhao
+            int cc = 0;//contador de carro
+            int cv = cc + cam; //contador de veiculos somando carros e caminhoes
+            int op = 0;
+
+            do
+            {
+                op = menu();
+                switch (op)
+                {
+                    case 1:
+                        v[cc++] = cadastrarVeiculo(true);
+                        break;
+                    case 2:
+                        v[TTam - cam - 1] = cadastrarVeiculo(false);
+                        cam++;
+                        break;
+
+                    case 3:
+                        consultarPlaca(v, cc, cam, TTam);
+                        break;
+
+                    case 4:
+                        consultarCaminhaoPorModelo(v, cam, TTam);
+                        break;
+
+                    case 5:
+                        consultarCarroPorCor(v, cc);
+                        break;
+
+
+                    case 6:
+                        exibirCarros(v, cc);
+                        break;
+
+
+                    case 7:
+                        exibirCaminhoes(v, cam, TTam);
+                        break;
+
+                    case 0:
+                        break;
+                    default:
+                        Console.WriteLine("opção invalida.");
+                        break;
+                }
+
+                Console.SetCursorPosition(50, 20);
+                Console.Write("Tecle algo para continuar");
+                Console.ReadKey();
+            } while (op != 0);
+        }
+
+        public static int menu()
+        {
+            Console.Clear();
+            Console.WriteLine("**menu principal **");
+            Console.WriteLine("1 - cadastrar de carro");
+            Console.WriteLine("2 - cadastrar de caminhão");
+            Console.WriteLine("3 - consulta por placa");
+            Console.WriteLine("4 - consulta Caminhão por modelo");
+            Console.WriteLine("5 - Consultar Carro por cor");
+            Console.WriteLine("6 - exibir todos os carros cadastrados");
+            Console.WriteLine("7 - exibir todos os caminhões cadastrados");
+            Console.WriteLine("0 - Sair");
+            Console.Write("\n digite uma opção: ");
+            return int.Parse(Console.ReadLine());
+        }
+
+
+        public static void exibirCarros(Veiculo[] v, int cc)
+        {
+            Console.Clear();
+            Console.WriteLine("\n\n**Lista de carros**\n\n");
+            for (int x = 0; x < cc; x++)
+            {
+                if (v[x] is Carro)
+                {
+                    Carro carro = (Carro)v[x];
+                    Console.WriteLine($"///////////////////////////////////" +
+                                      $"\n\n modelo:{carro.Modelo} \n fabricante: {carro.Fabricante} \n Ano: {carro.Ano} " +
+                                      $"\n Portas: {carro.Portas} \n Placa: {carro.Placa} \n Capacidade: {carro.Capacidade} \n Bagageiro: {(carro.Bagageiro ? "Sim" : "Não")} \n\n /////////////////////////////////// ");
+                }
+            }
+        }
+
+
+        public static void consultarPlaca(Veiculo[] v, int cc, int cam, int TTam)
+        {
+            Console.Write("Digite a placa do veículo: ");
+            string placa = Console.ReadLine();
+            bool encontrado = false;
+            for (int x = 0; x < TTam; x++)
+            {
+                if (v[x].Placa.ToLower() == placa.ToLower())
+                {
+                    Console.Clear();
+                    Console.WriteLine("////////////////////////");
+                    Console.WriteLine("\n\n**Veículo encontrado!**\n\n");
+                    Console.WriteLine($"Modelo: {v[x].Modelo}");
+                    Console.WriteLine($"Fabricante: {v[x].Fabricante}");
+                    Console.WriteLine($"Ano: {v[x].Ano}");
+                    Console.WriteLine($"Portas: {v[x].Portas}");
+                    Console.WriteLine($"Cor: {v[x].Cor}");
+                    Console.WriteLine($"Placa: {v[x].Placa}");
+                    if (v[x] is Carro)
+                    {
+                        Carro carro = (Carro)v[x];
+                        Console.WriteLine($"Capacidade: {carro.Capacidade}");
+                        Console.WriteLine($"Bagageiro: {(carro.Bagageiro ? "Sim" : "Não")}");
+                        Console.WriteLine("////////////////////////");
+                    }
+                    else if (v[x] is Caminhao)
+                    {
+                        Caminhao caminhao = (Caminhao)v[x];
+                        Console.WriteLine($"Número de Eixos: {caminhao.NumeroEixos}");
+                        Console.WriteLine($"Peso Máximo de Carga: {caminhao.PesoMaximoCarga} toneladas");
+                        Console.WriteLine("////////////////////////");
+                    }
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado)
+            {
+                Console.WriteLine("Veículo não encontrado!");
+            }
+        }
+
+        public static void consultarCaminhaoPorModelo(Veiculo[] v, int cam, int TTam)
+        {
+            Console.Write("Digite o modelo do caminhão: ");
+            string modelo = Console.ReadLine();
+            bool encontrado = false;
+            for (int x = TTam - cam; x < TTam; x++)
+            {
+                if (v[x].Modelo.ToLower() == modelo.ToLower() && v[x] is Caminhao)
+                {
+                    Console.Clear();
+                    Console.WriteLine("////////////////////////");
+                    Console.WriteLine("\n\n**Caminhão encontrado!**\n\n");
+                    Console.WriteLine(v[x].ToString());
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado)
+            {
+                Console.WriteLine("////////////////////////");
+                Console.WriteLine("Caminhão não encontrado!");
+                Console.WriteLine("////////////////////////");
+            }
+        }
+
+
+        public static void consultarCarroPorCor(Veiculo[] v, int cc)
+        {
+            Console.Write("Digite a cor do carro: ");
+            string cor = Console.ReadLine();
+            bool encontrado = false;
+            for (int x = 0; x < cc; x++)
+            {
+                if (v[x].Cor.ToLower() == cor.ToLower() && v[x] is Carro)
+                {
+                    Console.Clear();
+                    Console.WriteLine("////////////////////////");
+                    Console.WriteLine("\n\n**Carro encontrado!**\n\n");
+                    Console.WriteLine(v[x].ToString());
+                    Console.WriteLine("////////////////////////");
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado)
+            {
+                Console.WriteLine("Carro não encontrado!");
+            }
+        }
+
+        public static void exibirCaminhoes(Veiculo[] v, int cam, int TTam)
+        {
+            Console.Clear();
+            Console.WriteLine("\n\n**Lista de caminhões**\n\n");
+            for (int x = TTam - cam; x < TTam; x++)
+            {
+                if (v[x] is Caminhao)
+                {
+                    Caminhao caminhao = (Caminhao)v[x];
+                    Console.WriteLine($"///////////////////////////////////" +
+                                      $"\n\n modelo:{caminhao.Modelo} \n fabricante: {caminhao.Fabricante} \n Ano: {caminhao.Ano} " +
+                                      $"\n Portas: {caminhao.Portas} \n Cor: {caminhao.Cor} \n Placa: {caminhao.Placa} \n Número de Eixos: {caminhao.NumeroEixos} \n Peso Máximo de Carga: {caminhao.PesoMaximoCarga} toneladas \n\n /////////////////////////////////// ");
+                }
+            }
+        }
+
+
+        public static Veiculo cadastrarVeiculo(bool isCarro)
+        {
+            Console.Clear();
+            Console.Write("digite o modelo: ");
+            string m = Console.ReadLine();
+            Console.Write("digite o fabricante: ");
+            string f = Console.ReadLine();
+            Console.Write("digite o ano: ");
+            int a = int.Parse(Console.ReadLine());
+            Console.Write("digite a cor: ");
+            string c = Console.ReadLine();
+            Console.Write("digite o numero de portas: ");
+            int p = int.Parse(Console.ReadLine());
+            Console.Write("digite a placa do veículo: ");
+            string placa = Console.ReadLine();
+
+            if (isCarro)
+            {
+                Console.Write("digite a capacidade do carro: ");
+                int Capacidade = int.Parse(Console.ReadLine());
+                Console.Write("O carro tem bagageiro? (s/n): ");
+                string resposta = Console.ReadLine();
+                bool bagageiro = resposta.ToLower() == "s";
+                return new Carro(m, f, a, c, p, placa, Capacidade, bagageiro);
+            }
+            else
+            {
+                Console.Write("digite o número de eixos do caminhão: ");
+                int numeroEixos = int.Parse(Console.ReadLine());
+                Console.Write("digite o peso máximo de carga do caminhão (em toneladas): ");
+                double pesoMaximoCarga = double.Parse(Console.ReadLine());
+                return new Caminhao(m, f, a, c, p, placa, numeroEixos, pesoMaximoCarga);
+            }
+        }
+
+
+        public abstract class Veiculo
+        {
+            public string Modelo { get; set; }
+            public string Fabricante { get; set; }
+            public int Ano { get; set; }
+            public string Cor { get; set; }
+            public int Portas { get; set; }
+            public string Placa { get; set; }
+
+            public Veiculo(string modelo, string fabricante, int ano, string cor, int portas, string placa)
+            {
+                Modelo = modelo;
+                Fabricante = fabricante;
+                Ano = ano;
+                Cor = cor;
+                Portas = portas;
+                Placa = placa;
+            }
+        }
+
+
+    
+
+        public class Caminhao : Veiculo
+        {
+            public int NumeroEixos { get; set; }
+            public double PesoMaximoCarga { get; set; }
+
+            public Caminhao(string modelo, string fabricante, int ano, string cor, int portas, string placa, int numeroEixos, double pesoMaximoCarga)
+                : base(modelo, fabricante, ano, cor, portas, placa)
+            {
+                NumeroEixos = numeroEixos;
+                PesoMaximoCarga = pesoMaximoCarga;
+            }
+
+            public override string ToString()
+            {
+                return $"Modelo: {Modelo}\nFabricante: {Fabricante}\nAno: {Ano}\nPortas: {Portas}\nCor: {Cor}\nPlaca: {Placa}\nNúmero de Eixos: {NumeroEixos}\nPeso Máximo de Carga: {PesoMaximoCarga} toneladas";
+            }
+        }
+
+        public class Carro : Veiculo
+        {
+            public int Capacidade { get; set; }
+            public bool Bagageiro { get; set; }
+
+            public Carro(string modelo, string fabricante, int ano, string cor, int portas, string placa, int capacidade, bool bagageiro)
+                : base(modelo, fabricante, ano, cor, portas, placa)
+            {
+                Capacidade = capacidade;
+                Bagageiro = bagageiro;
+            }
+
+            public override string ToString()
+            {
+                return $"Modelo: {Modelo}\nFabricante: {Fabricante}\nAno: {Ano}\nPortas: {Portas}\nCor: {Cor}\nPlaca: {Placa}\nCapacidade: {Capacidade}\nBagageiro: {(Bagageiro ? "Sim" : "Não")}";
+            }
+        }
+
+
+
+
+
+    }
+}
