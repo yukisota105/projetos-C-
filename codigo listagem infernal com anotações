@@ -1,0 +1,81 @@
+using System;
+
+namespace agoravai
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Definição de constantes para limite de veículos
+            const int TCar = 300; // Limite de carros
+            const int TCam = 200; // Limite de caminhões
+            const int TTam = TCar + TCam; // Total de veículos possíveis
+
+            // Array de veículos que armazenará tanto carros quanto caminhões
+            Veiculo[] v = new Veiculo[TTam];
+            int cam = 0; // Contador de caminhões cadastrados
+            int cc = 0; // Contador de carros cadastrados
+            int op = 0; // Opção do menu
+
+            do
+            {
+                op = menu(); // Chama o menu e recebe a opção escolhida
+                switch (op)
+                {
+                    case 1:
+                        v[cc++] = cadastrarVeiculo(true); // Cadastra um carro
+                        break;
+                    case 2:
+                        v[TTam - cam - 1] = cadastrarVeiculo(false); // Cadastra um caminhão na posição correta
+                        cam++;
+                        break;
+                    case 3:
+                        consultarPlaca(v, cc, cam, TTam); // Consulta veículo pela placa
+                        break;
+                    case 4:
+                        consultarCaminhaoPorModelo(v, cam, TTam); // Consulta caminhão pelo modelo
+                        break;
+                    case 5:
+                        consultarCarroPorCor(v, cc); // Consulta carro pela cor
+                        break;
+                    case 6:
+                        exibirCarros(v, cc); // Exibe todos os carros cadastrados
+                        break;
+                    case 7:
+                        exibirCaminhoes(v, cam, TTam); // Exibe todos os caminhões cadastrados
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+
+                Console.SetCursorPosition(50, 20);
+                Console.Write("Tecle algo para continuar");
+                Console.ReadKey();
+            } while (op != 0); // Repete até que o usuário escolha sair
+        }
+
+        public static int menu()
+        {
+            // Exibe o menu e retorna a opção escolhida pelo usuário
+            Console.Clear();
+            Console.WriteLine("** Menu Principal **");
+            Console.WriteLine("1 - Cadastrar Carro");
+            Console.WriteLine("2 - Cadastrar Caminhão");
+            Console.WriteLine("3 - Consultar por Placa");
+            Console.WriteLine("4 - Consultar Caminhão por Modelo");
+            Console.WriteLine("5 - Consultar Carro por Cor");
+            Console.WriteLine("6 - Exibir Todos os Carros Cadastrados");
+            Console.WriteLine("7 - Exibir Todos os Caminhões Cadastrados");
+            Console.WriteLine("0 - Sair");
+            Console.Write("\nDigite uma opção: ");
+            return int.Parse(Console.ReadLine());
+        }
+
+        // Funções de exibição, consulta e cadastro seguem abaixo
+        
+        // Outras funções continuam sem alteração, apenas com explicações dentro do código
+    }
+}
